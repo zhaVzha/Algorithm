@@ -29,34 +29,48 @@ public class HuffmanTree{
         nodes.add(new Node("G", 0.03));
         nodes.add(new Node("H", 0.11));
 
-        Node root = HuffmanTree.creatHuffmanTree(nodes);
+        creatHuffmanTree(nodes);
         System.out.print("CreatTreeIsSuccess");
         HuffmanTree.print(nodes);
     }
 
-    public static Node creatHuffmanTree(List<Node> nodes){
+    /***
+     * 创建HuffmanTree
+     * @param nodes
+     */
+    public static void creatHuffmanTree(List<Node> nodes){
         while (nodes.size()>1){
-            quickSort(nodes);
+            quickSort(nodes);   //从小到大排序
+            //取出最小的两个节点
             Node leftTree = nodes.get(0);
             Node rightTree = nodes.get(1);
-
+            //创建新节点
             Node parent = new Node(null,leftTree.weight+rightTree.weight);
             parent.leftChild = leftTree;
             parent.rightChild = rightTree;
-
+            //删除节点
             nodes.remove(0);
             nodes.remove(0);
-
+            //将新节点加入
             nodes.add(parent);
         }
-        return nodes.get(0);
 
     }
 
+    /**
+     * 快排预处理
+     * @param nodes
+     */
     public static void quickSort(List<Node> nodes){
         realQuickSort(nodes,0, nodes.size()-1);
     }
 
+    /**
+     * 快排程序
+     * @param nodes
+     * @param low 下届
+     * @param high 上界
+     */
     public static void realQuickSort(List<Node> nodes,int low,int high){
         if(low < high){
             int l = low;
@@ -84,25 +98,31 @@ public class HuffmanTree{
                 realQuickSort(nodes, h + 1, high);
         }
     }
+
     private static void swap(List<Node> nodes, int i , int j){
         Node tmp = nodes.get(i) ;
         nodes.set(i, nodes.get(j));
         nodes.set(j, tmp);
     }
 
+    /**
+     * 输出HuffmanTree
+     * @param nodes
+     */
     private static void print(List<Node> nodes){
         Queue<Node> queue = new ArrayDeque<Node>();
-        List<Node> list = new ArrayList<Node>();
+        List<Node> list = new ArrayList<Node>();    //保存
         Node root = nodes.get(0);
-        queue.offer(root);
+        queue.offer(root); //把父节点加入队列
 
         while(!queue.isEmpty()){
             list.add(queue.peek());
             Node p = queue.poll();
-
+            //如果有左孩子 就加入队列
             if(p.leftChild != null){
                 queue.offer(p.leftChild);
             }
+            //如果有右孩子，也加入队列
             if(p.rightChild != null){
                 queue.offer(p.rightChild);
             }
